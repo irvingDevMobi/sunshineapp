@@ -2,4 +2,11 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="padding_general">16dp</dimen>
+    <dimen name="size_list_icon">60dp</dimen>
+    <dimen name="font_card_top_weather">22sp</dimen>
+    <dimen name="font_card_top_temp_min">36sp</dimen>
+    <dimen name="font_card_top_temp_max">72sp</dimen>
+    <dimen name="font_card_top_date">22sp</dimen>
+    <dimen name="card_top_icon">100dp</dimen>
 </resources>

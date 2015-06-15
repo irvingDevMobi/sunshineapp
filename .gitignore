@@ -3,10 +3,11 @@
 gradlew
 gradlew.bat
 /local.properties
-/.idea/*.*
+/.idea/*
 /.idea/libraries
 .DS_Store
 /build/*
+/app/build/*
 /captures
 *.iml
 /gradle/wrapper

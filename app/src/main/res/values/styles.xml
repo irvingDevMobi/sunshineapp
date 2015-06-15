@@ -5,4 +5,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="text_card_top_list">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>
