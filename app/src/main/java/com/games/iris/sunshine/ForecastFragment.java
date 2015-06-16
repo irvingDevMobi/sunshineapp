@@ -110,6 +110,9 @@ public class ForecastFragment extends Fragment {
             case R.id.action_refresh:
                 updateWeather();
                 break;
+            case R.id.action_show_map:
+                showMap();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -120,6 +123,26 @@ public class ForecastFragment extends Fragment {
             .getString(getString(R.string.pref_location_key),
                        getString(R.string.pref_location_default));
         new FetchWeatherTask().execute(postalCode);
+    }
+
+    private void showMap()
+    {
+        String postalCode = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(getString(R.string.pref_location_key),
+                           getString(R.string.pref_location_default));
+
+        Uri.Builder uri = new Uri.Builder();
+        uri.scheme("geo");
+        uri.appendPath("0,0");
+        uri.appendQueryParameter(cpParameter, postalCode);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri.build());
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        }
+
+
     }
 
     class FetchWeatherTask extends AsyncTask<String, String, String[]> {
@@ -151,7 +174,7 @@ public class ForecastFragment extends Fragment {
                 builder.appendPath("2.5");
                 builder.appendPath("forecast");
                 builder.appendPath("daily");
-                builder.appendQueryParameter("q", params[0]);
+                builder.appendQueryParameter(cpParameter, params[0]);
                 builder.appendQueryParameter("mode", "json");
                 builder.appendQueryParameter("units", "metrics");
                 builder.appendQueryParameter("cnt", ""+numDays);
