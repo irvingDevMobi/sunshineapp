@@ -3,8 +3,9 @@ package com.games.iris.sunshine;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,12 +28,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -67,12 +63,12 @@ public class ForecastFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         List<String> forcastValues = new ArrayList<>();
-        forcastValues.add("Today - Sunny 20/25");
-        forcastValues.add("Tomorrow - Foggy 15/20");
-        forcastValues.add("Thursday - Cloudy 17/21");
-        forcastValues.add("Friday - Rainy 17/25");
-        forcastValues.add("Saturday - Foggy 17/25");
-        forcastValues.add("Sunday - Sunny 17/25");
+//        forcastValues.add("Today - Sunny 20/25");
+//        forcastValues.add("Tomorrow - Foggy 15/20");
+//        forcastValues.add("Thursday - Cloudy 17/21");
+//        forcastValues.add("Friday - Rainy 17/25");
+//        forcastValues.add("Saturday - Foggy 17/25");
+//        forcastValues.add("Sunday - Sunny 17/25");
 
         arrayAdapter = new ArrayAdapter<>(getActivity(),
                 R.layout.list_item_forecast,
@@ -96,6 +92,12 @@ public class ForecastFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.forcastfragment, menu);
@@ -105,10 +107,18 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                new FetchWeatherTask().execute("94043");
+                updateWeather();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateWeather()
+    {
+        String postalCode = PreferenceManager.getDefaultSharedPreferences(getActivity())
+            .getString(getString(R.string.pref_location_key),
+                       getString(R.string.pref_location_default));
+        new FetchWeatherTask().execute(postalCode);
     }
 
     class FetchWeatherTask extends AsyncTask<String, String, String[]> {
@@ -140,7 +150,7 @@ public class ForecastFragment extends Fragment {
                 builder.appendPath("2.5");
                 builder.appendPath("forecast");
                 builder.appendPath("daily");
-                builder.appendQueryParameter("q", "94043");
+                builder.appendQueryParameter("q", params[0]);
                 builder.appendQueryParameter("mode", "json");
                 builder.appendQueryParameter("units", "metrics");
                 builder.appendQueryParameter("cnt", ""+numDays);
