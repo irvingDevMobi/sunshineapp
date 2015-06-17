@@ -21,7 +21,9 @@ package com.games.iris.sunshine;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +34,7 @@ import android.widget.TextView;
 
 public class DetailActivity extends ActionBarActivity {
 
+    public static final String HASHTAG_APP = " #SunshineApp";
     public static String extraString;
 
     @Override
@@ -53,6 +56,12 @@ public class DetailActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.detail, menu);
+
+        // Set up ShareActionProvider's default share intent
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        ShareActionProvider mShareActionProvider =
+            (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        mShareActionProvider.setShareIntent(getShareIntent());
         return true;
     }
 
@@ -75,6 +84,15 @@ public class DetailActivity extends ActionBarActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Intent getShareIntent()
+    {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, extraString + HASHTAG_APP);
+        return shareIntent;
     }
 
 
