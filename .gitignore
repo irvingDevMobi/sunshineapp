@@ -1,13 +1,13 @@
 .gradle
-/.gradle/*
 gradlew
 gradlew.bat
 /local.properties
 /.idea/*
-/.idea/libraries
 .DS_Store
 /build/*
 /app/build/*
 /captures
 *.iml
 /gradle/wrapper
+app/proguard-rules.pro
+gradle.properties
