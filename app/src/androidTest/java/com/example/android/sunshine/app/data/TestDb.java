@@ -17,6 +17,8 @@ package com.example.android.sunshine.app.data;
 
 import android.test.AndroidTestCase;
 
+import com.games.iris.sunshine.data.WeatherDbHelper;
+
 public class TestDb extends AndroidTestCase {
 
     public static final String LOG_TAG = TestDb.class.getSimpleName();

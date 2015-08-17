@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app.data;
+package com.games.iris.sunshine.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.android.sunshine.app.data.WeatherContract.LocationEntry;
-import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
+import com.games.iris.sunshine.data.WeatherContract.LocationEntry;
+import com.games.iris.sunshine.data.WeatherContract.WeatherEntry;
 
 /**
  * Manages a local database for weather data.
@@ -30,7 +30,12 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 2;
 
-    static final String DATABASE_NAME = "weather.db";
+    public static final String DATABASE_NAME = "weather.db";
+    public static final String INT_PRIMARY_KEY_AUTOINCREMENT = " INTEGER PRIMARY KEY AUTOINCREMENT,";
+    public static final String INTEGER_NOT_NULL = " INTEGER NOT NULL, ";
+    public static final String TEXT_NOT_NULL = " TEXT NOT NULL, ";
+    public static final String REAL_NOT_NULL = " REAL NOT NULL, ";
+    public static final String CREATE_TABLE = "CREATE TABLE ";
 
     public WeatherDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -38,21 +43,21 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        final String SQL_CREATE_WEATHER_TABLE = "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_WEATHER_TABLE = CREATE_TABLE + WeatherEntry.TABLE_NAME + " (" +
                 // Why AutoIncrement here, and not above?
                 // Unique keys will be auto-generated in either case.  But for weather
                 // forecasting, it's reasonable to assume the user will want information
                 // for a certain date and all dates *following*, so the forecast data
                 // should be sorted accordingly.
-                WeatherEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                WeatherEntry._ID + INT_PRIMARY_KEY_AUTOINCREMENT +
 
                 // the ID of the location entry associated with this weather data
-                WeatherEntry.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
+                WeatherEntry.COLUMN_LOC_KEY + INTEGER_NOT_NULL +
                 WeatherEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
-                WeatherEntry.COLUMN_SHORT_DESC + " TEXT NOT NULL, " +
+                WeatherEntry.COLUMN_SHORT_DESC + TEXT_NOT_NULL +
                 WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL," +
 
-                WeatherEntry.COLUMN_MIN_TEMP + " REAL NOT NULL, " +
+                WeatherEntry.COLUMN_MIN_TEMP + REAL_NOT_NULL +
                 WeatherEntry.COLUMN_MAX_TEMP + " REAL NOT NULL, " +
 
                 WeatherEntry.COLUMN_HUMIDITY + " REAL NOT NULL, " +
@@ -69,7 +74,18 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 " UNIQUE (" + WeatherEntry.COLUMN_DATE + ", " +
                 WeatherEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
 
+        final String SQL_CREATE_LOCATIONS_TABLE =
+            CREATE_TABLE + LocationEntry.TABLE_NAME + " (" +
+            LocationEntry._ID + INT_PRIMARY_KEY_AUTOINCREMENT +
+            LocationEntry.COLUMN_CITY_NAME + TEXT_NOT_NULL +
+            LocationEntry.COLUMN_COORD_LAT + INTEGER_NOT_NULL +
+            LocationEntry.COLUMN_COORD_LONG + INTEGER_NOT_NULL +
+            LocationEntry.COLUMN_LOCATION_SETTING + TEXT_NOT_NULL + ");";
+
         sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_LOCATIONS_TABLE);
+
+
     }
 
     @Override
