@@ -31,7 +31,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
 
     public static final String DATABASE_NAME = "weather.db";
-    public static final String INT_PRIMARY_KEY_AUTOINCREMENT = " INTEGER PRIMARY KEY AUTOINCREMENT,";
+    public static final String INT_PRIMARY_KEY_AUTOINCREMENT = " INTEGER PRIMARY KEY AUTOINCREMENT, ";
     public static final String INTEGER_NOT_NULL = " INTEGER NOT NULL, ";
     public static final String TEXT_NOT_NULL = " TEXT NOT NULL, ";
     public static final String REAL_NOT_NULL = " REAL NOT NULL, ";
@@ -77,10 +77,11 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_LOCATIONS_TABLE =
             CREATE_TABLE + LocationEntry.TABLE_NAME + " (" +
             LocationEntry._ID + INT_PRIMARY_KEY_AUTOINCREMENT +
+            LocationEntry.COLUMN_LOCATION_SETTING + " TEXT UNIQUE NOT NULL, " +
             LocationEntry.COLUMN_CITY_NAME + TEXT_NOT_NULL +
             LocationEntry.COLUMN_COORD_LAT + INTEGER_NOT_NULL +
-            LocationEntry.COLUMN_COORD_LONG + INTEGER_NOT_NULL +
-            LocationEntry.COLUMN_LOCATION_SETTING + TEXT_NOT_NULL + ");";
+            LocationEntry.COLUMN_COORD_LONG + " INTEGER NOT NULL" +
+                    ");";
 
         sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_LOCATIONS_TABLE);
